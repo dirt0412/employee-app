@@ -1,0 +1,52 @@
+<div class="table-container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="sortable" (click)="onHeaderClick('registryNumber')">
+          Register number
+          <span class="arrow" *ngIf="sortKey === 'registryNumber'">
+            {{ getArrow('registryNumber') }}
+          </span>
+        </th>
+
+        <th class="sortable" (click)="onHeaderClick('firstName')">
+          Name
+          <span class="arrow" *ngIf="sortKey === 'firstName'">
+            {{ getArrow('firstName') }}
+          </span>
+        </th>
+
+        <th class="sortable" (click)="onHeaderClick('lastName')">
+          Last name
+          <span class="arrow" *ngIf="sortKey === 'lastName'">
+            {{ getArrow('lastName') }}
+          </span>
+        </th>
+
+        <th class="sortable" (click)="onHeaderClick('gender')">
+          Gender
+          <span class="arrow" *ngIf="sortKey === 'gender'">
+            {{ getArrow('gender') }}
+          </span>
+        </th>
+
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let employee of sortedEmployees()">
+        <td>{{ employee.registryNumber }}</td>
+        <td>{{ employee.firstName }}</td>
+        <td>{{ employee.lastName }}</td>
+        <td>{{ employee.gender }}</td>
+        <td class="actions-cell">
+          <!-- default button 'Edit' -->
+          <a class="btn ghost" [routerLink]="['/employees', employee.id, 'edit']">Edit</a>
+
+          <ng-content select="[actions]"></ng-content>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

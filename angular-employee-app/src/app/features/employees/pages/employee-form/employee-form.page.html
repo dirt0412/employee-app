@@ -1,0 +1,47 @@
+<div class="form-page">
+  <div class="card form-scroll-area">
+    <form [formGroup]="form" class="form-grid">
+      <div class="field">
+        <label>Name</label>
+        <input class="input" formControlName="firstName" maxlength="50">
+        <div class="error" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+          Name is required (1-50 characters).
+        </div>
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input class="input" formControlName="lastName" maxlength="50">
+        <div class="error" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+          Last Name is required (1-50 characters).
+        </div>
+      </div>
+      <div class="field">
+        <label>Gender</label>
+        <select class="input" formControlName="gender">
+          <option [ngValue]="Gender.Male">Male</option>
+          <option [ngValue]="Gender.Female">Female</option>
+          <option [ngValue]="Gender.Other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Register number</label>
+        <input class="input" [value]="registryPreview()" disabled>
+        <small style="color:#6b7280;">Generated automatically upon saving.</small>
+      </div>
+    </form>
+  </div>
+
+  <div class="form-footer">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="color:#6b7280;">
+        <ng-container *ngIf="isEdit(); else addMode">Edit employee — ID: {{ id() }}</ng-container>
+        <ng-template #addMode>Adding new employee</ng-template>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <a routerLink="/employees" class="btn secondary btn-link">Cancel</a>
+        <button class="btn" (click)="onSave()" [disabled]="form.invalid">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.list-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--gap);
+  overflow: auto;
+}
+
+.list-header {
+  flex: 0 0 auto;
+}
+
+.table-card {
+  flex: 0 0 auto;
+  align-self: stretch;
+}
+
+.btn-link {
+  text-decoration: none;
+}

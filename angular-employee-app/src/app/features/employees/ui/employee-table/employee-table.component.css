@@ -1,0 +1,85 @@
+.table-container {
+  /* default without horizontal scroll; in case of very narrow screen, content will still break (see cell rules) */
+  overflow-x: hidden;
+  display: block;
+}
+
+/* Stable column layout */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;            /* KEY: fixed column layout */
+}
+
+th,
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  overflow: hidden;               
+  text-overflow: ellipsis;      
+}
+
+/* column "Action" */
+.table th:last-child,
+.table td:last-child {
+  white-space: nowrap;
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-start;
+}
+
+
+/* Headers do not wrap - sort icon and text in one line */
+th {
+  white-space: nowrap;
+}
+
+td {
+  white-space: normal;            
+  word-break: break-word;
+}
+
+.table th:last-child,
+.table td:last-child {
+  white-space: nowrap;         
+}
+
+/* sort: "hand" i hover */
+th.sortable {
+  cursor: pointer;               
+  user-select: none;
+}
+th.sortable:hover {
+  background-color: #f2f2f2;
+}
+
+/* arrow direction sorting */
+.arrow {
+  font-size: 0.75rem;
+  margin-left: 4px;
+  color: #666;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Action buttons in the table */
+.btn.ghost {
+  padding: 4px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  text-decoration: none;
+  color: #111827;
+}
+.btn.ghost:hover {
+  background: #f3f4f6;
+}

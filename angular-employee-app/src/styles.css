@@ -1,0 +1,135 @@
+:root {
+  --gap: 12px;
+  --border: 1px solid #e5e7eb;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #111827;
+  background: #f8fafc;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.card {
+  background: white;
+  border: var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.row { display: flex; gap: var(--gap); flex-wrap: wrap; }
+.col { flex: 1 1 300px; }
+
+.input, select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn.secondary { background: #6b7280; }
+.btn.ghost { background: transparent; color: #2563eb; border: 1px solid #93c5fd; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.table th { background: #f3f4f6; font-weight: 600; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 12px;
+}
+
+.link { color: #2563eb; text-decoration: none; }
+.link:hover { text-decoration: underline; }
+
+/* ---------------------- Forms ---------------------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+.form-grid .field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 14px; color: #374151; }
+.error { color: #b91c1c; font-size: 12px; }
+
+@media (max-width: 720px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Global layout: no body scroll, content "at the top" --- */
+html, body {
+  height: 100%;
+  overflow: hidden;               /* disable global scroll */
+}
+
+app-root {
+  height: 100%;                   /* fixed height for layout */
+  display: flex;
+  flex-direction: column;
+}
+
+app-root > main.container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+app-root > main.container > * {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* --- view form: „at the top” + sticky footer --- */
+.form-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  min-height: 0;
+  height: 100%;
+  overflow: auto;     
+}
+
+/* footer */
+.form-scroll-area {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+/* footer always visible (sticky to bottom of visible area .form-page) */
+.form-footer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: var(--border);
+  padding: 12px;
+}

@@ -1,0 +1,30 @@
+.btn-link {
+    text-decoration: none;
+}
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+/* main wrapper page */
+.list-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;  /* at the top */
+  align-items: stretch;
+  gap: var(--gap);
+  overflow: auto;               /* scroll the list page */
+}
+
+/* Header/filters above the table (optional) */
+.list-header {
+  flex: 0 0 auto;
+}
+
+/* The card with the table stretches to full width but is not centered vertically */
+.table-card {
+  flex: 0 0 auto;
+  align-self: stretch;
+}

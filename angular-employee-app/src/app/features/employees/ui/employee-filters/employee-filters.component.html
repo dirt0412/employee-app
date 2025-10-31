@@ -1,0 +1,21 @@
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col">
+      <input
+        class="input"
+        placeholder="Filter by Name..."
+        formControlName="firstName" />
+    </div>
+
+    <div class="col">
+      <input
+        class="input"
+        placeholder="Filter by Last Name..."
+        formControlName="lastName" />
+    </div>
+
+    <div class="col" style="max-width:160px; display:flex; gap:8px; align-items:stretch;">
+      <ng-content select="[actions]"></ng-content>
+    </div>
+  </div>
+</form>

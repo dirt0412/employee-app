@@ -1,0 +1,23 @@
+<div class="card" style="margin-bottom:12px;">
+  <app-employee-filters
+    [sortKey]="store.sortKey()"
+    [sortDir]="store.sortDir()"
+    (firstNameChange)="store.setFirstNameFilter($event)"
+    (lastNameChange)="store.setLastNameFilter($event)"
+    (sortKeyChange)="store.setSortKey($event)"
+    (toggleSortDir)="store.toggleSortDir()"
+  >
+    <a actions routerLink="/employees/new" class="btn btn-link" style="flex:1;">Add employee</a>
+  </app-employee-filters>
+</div>
+
+<div class="card">
+  <app-employee-table
+    [employees]="store.filteredEmployees()"
+    [sortKey]="store.sortKey()"
+    [sortDir]="store.sortDir()"
+    (sortKeyChange)="store.setSortKey($event)"
+    (toggleSortDir)="store.toggleSortDir()"
+  >
+  </app-employee-table>
+</div>
