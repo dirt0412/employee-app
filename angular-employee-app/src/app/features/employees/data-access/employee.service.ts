@@ -40,6 +40,16 @@ export class EmployeeService {
     return updated;
   }
 
+  delete(id: number): boolean {
+    const current = this.getSnapshot();
+    const exists = current.some(e => e.id === id);
+
+    if (!exists) return false;
+    
+    this.employeesSubject.next(current.filter(e => e.id !== id));
+    return true;
+  }
+
   /** Generuje numer ewidencyjny jako string 8-znakowy z wiodącymi zerami. */
   private generateRegistryNumber(seed: number): string {
     return seed.toString().padStart(8, '0');

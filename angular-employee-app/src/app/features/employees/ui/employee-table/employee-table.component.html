@@ -35,7 +35,7 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let employee of sortedEmployees()">
+      <tr *ngFor="let employee of sortedEmployees(); trackBy: trackById">
         <td>{{ employee.registryNumber }}</td>
         <td>{{ employee.firstName }}</td>
         <td>{{ employee.lastName }}</td>
@@ -43,6 +43,10 @@
         <td class="actions-cell">
           <!-- default button 'Edit' -->
           <a class="btn ghost" [routerLink]="['/employees', employee.id, 'edit']">Edit</a>
+
+          <button type="button" class="btn btn-sm btn-danger" (click)="onDelete(employee.id)">
+            Delete
+          </button>
 
           <ng-content select="[actions]"></ng-content>
         </td>

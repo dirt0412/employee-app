@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -12,6 +12,7 @@ import { EmployeeService } from '@employees/data-access/employee.service';
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './employee-form.page.html',
   styleUrls: ['./employee-form.page.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeeFormPage {
   Gender = Gender;

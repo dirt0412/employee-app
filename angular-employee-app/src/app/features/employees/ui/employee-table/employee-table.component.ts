@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Employee } from '../../models/employee.model';
@@ -10,7 +10,8 @@ type SortKey = 'firstName' | 'lastName' | 'registryNumber' | 'gender';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './employee-table.component.html',
-  styleUrls: ['./employee-table.component.css']
+  styleUrls: ['./employee-table.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeTableComponent {
   @Input() employees: Employee[] = [];
@@ -19,6 +20,9 @@ export class EmployeeTableComponent {
   @Input() sortDir: 'asc' | 'desc' = 'asc';
   @Output() sortKeyChange = new EventEmitter<SortKey>();
   @Output() toggleSortDir = new EventEmitter<void>();
+  @Output() delete = new EventEmitter<number>();
+
+  trackById = (_: number, e: Employee) => e.id;
 
   onHeaderClick(key: SortKey): void {
     if (this.sortKey === key) {
@@ -55,5 +59,9 @@ export class EmployeeTableComponent {
     });
 
     return arr;
+  }
+
+  onDelete(id: number) {
+    this.delete.emit(id);
   }
 }

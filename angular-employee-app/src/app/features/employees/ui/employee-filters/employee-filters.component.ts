@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Employee } from '../../models/employee.model';
@@ -11,7 +11,8 @@ type SortKey = keyof Pick<Employee, 'firstName' | 'lastName' | 'registryNumber'>
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './employee-filters.component.html',
-  styleUrls: ['./employee-filters.component.css']
+  styleUrls: ['./employee-filters.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeFiltersComponent implements OnInit, OnChanges {
   /** current sort key (initially provided from the page) */

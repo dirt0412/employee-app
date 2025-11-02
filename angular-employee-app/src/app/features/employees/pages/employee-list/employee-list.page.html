@@ -18,6 +18,7 @@
     [sortDir]="store.sortDir()"
     (sortKeyChange)="store.setSortKey($event)"
     (toggleSortDir)="store.toggleSortDir()"
+    (delete)="onDeleteRequested($event)"
   >
   </app-employee-table>
 </div>
