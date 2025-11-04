@@ -46,7 +46,7 @@ export class EmployeeFormPage {
   }
 
   id = computed(() => this.idParam());
-  isEdit = () => this.id() !== null;
+  isEdit = computed(() => this.id() != null);
 
   registryPreview = computed(() => {
     if (!this.isEdit()) return '— will be awarded —';
