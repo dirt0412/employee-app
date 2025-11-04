@@ -21,6 +21,9 @@ export class EmployeeFiltersComponent implements OnInit, OnChanges {
   @Input() sortDir: 'asc' | 'desc' = 'asc';
   /** delay for typed filters (ms) */
   @Input() debounceMs = 400;
+  @Input() firstName: string = '';
+  @Input() lastName: string = '';
+
 
   @Output() firstNameChange = new EventEmitter<string>();
   @Output() lastNameChange = new EventEmitter<string>();
@@ -33,9 +36,12 @@ export class EmployeeFiltersComponent implements OnInit, OnChanges {
     sortKey: this.fb.control<SortKey | undefined>(undefined)
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+
+    this.fillForm();
+
     // first input with delay
     this.form.controls.firstName.valueChanges
       .pipe(debounceTime(this.debounceMs), distinctUntilChanged())
@@ -53,12 +59,28 @@ export class EmployeeFiltersComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // if sortKey is provided/changed externally (e.g. on page refresh), reflect it in the form
-    if (changes['sortKey'] && !changes['sortKey'].firstChange) {
-      this.form.patchValue({ sortKey: this.sortKey }, { emitEvent: false });
-    } else if (changes['sortKey'] && changes['sortKey'].firstChange) {
-      // initial setting of the select
-      this.form.patchValue({ sortKey: this.sortKey }, { emitEvent: false });
+    if ('firstName' in changes || 'lastName' in changes || 'sortKey' in changes) {
+      this.form.patchValue(
+        {
+          firstName: this.firstName ?? '',
+          lastName: this.lastName ?? '',
+          sortKey: this.sortKey,
+        },
+        { emitEvent: false }
+      );
     }
   }
+
+  fillForm(): void {
+    this.form.patchValue(
+      {
+        firstName: this.firstName ?? '',
+        lastName: this.lastName ?? '',
+        sortKey: this.sortKey,
+      },
+      { emitEvent: false }
+    );
+  }
+
+
 }

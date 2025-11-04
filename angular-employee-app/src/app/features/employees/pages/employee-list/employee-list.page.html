@@ -1,5 +1,7 @@
 <div class="card u-employee-list-page">
   <app-employee-filters
+    [firstName]="store.firstNameFilter()"
+    [lastName]="store.lastNameFilter()"
     [sortKey]="store.sortKey()"
     [sortDir]="store.sortDir()"
     (firstNameChange)="store.setFirstNameFilter($event)"
