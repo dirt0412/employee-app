@@ -4,16 +4,21 @@
       <div class="field">
         <label>Name</label>
         <input class="input" formControlName="firstName" maxlength="50">
-        <div class="error" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
-          Name is required (1-50 characters).
-        </div>
+        @if(form.controls.firstName.touched && form.controls.firstName.invalid) {
+          <div class="error" >
+            Name is required (1-50 characters).
+          </div>
+        }
+        
       </div>
       <div class="field">
         <label>Last Name</label>
         <input class="input" formControlName="lastName" maxlength="50">
-        <div class="error" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
-          Last Name is required (1-50 characters).
-        </div>
+        @if(form.controls.lastName.touched && form.controls.lastName.invalid) {
+          <div class="error" >
+            Last Name is required (1-50 characters).
+          </div>
+        }
       </div>
       <div class="field">
         <label>Gender</label>
@@ -35,8 +40,13 @@
   <div class="form-footer">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
       <div style="color:#6b7280;">
-        <ng-container *ngIf="isEdit(); else addMode">Edit employee — ID: {{ id() }}</ng-container>
-        <ng-template #addMode>Adding new employee</ng-template>
+        @if (isEdit()) {
+          Edit employee — ID: {{ id() }}
+        } @else {
+          Adding new employee
+        }
+        <!-- id() - signal computed (read only) -->
+        <!-- ng-container and <ng-template> not necessary – because @if/@else replace it -->
       </div>
       <div style="display:flex;gap:8px;">
         <a routerLink="/employees" class="btn secondary btn-link">Cancel</a>
