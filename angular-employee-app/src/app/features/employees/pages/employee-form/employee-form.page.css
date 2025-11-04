@@ -25,3 +25,15 @@
 .btn-link {
   text-decoration: none;
 }
+
+.text-muted {
+  color: #6b7280;
+}
+
+.btn-add-new-employe {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}

@@ -5,19 +5,19 @@
         <label>Name</label>
         <input class="input" formControlName="firstName" maxlength="50">
         @if(form.controls.firstName.touched && form.controls.firstName.invalid) {
-          <div class="error" >
-            Name is required (1-50 characters).
-          </div>
+        <div class="error">
+          Name is required (1-50 characters).
+        </div>
         }
-        
+
       </div>
       <div class="field">
         <label>Last Name</label>
         <input class="input" formControlName="lastName" maxlength="50">
         @if(form.controls.lastName.touched && form.controls.lastName.invalid) {
-          <div class="error" >
-            Last Name is required (1-50 characters).
-          </div>
+        <div class="error">
+          Last Name is required (1-50 characters).
+        </div>
         }
       </div>
       <div class="field">
@@ -32,18 +32,18 @@
       <div class="field">
         <label>Register number</label>
         <input class="input" [value]="registryPreview()" disabled>
-        <small style="color:#6b7280;">Generated automatically upon saving.</small>
+        <small class="text-muted">Generated automatically upon saving.</small>
       </div>
     </form>
   </div>
 
   <div class="form-footer">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-      <div style="color:#6b7280;">
+    <div class="btn-add-new-employe">
+      <div class="text-muted">
         @if (isEdit()) {
-          Edit employee — ID: {{ id() }}
+        Edit employee — ID: {{ id() }}
         } @else {
-          Adding new employee
+        Adding new employee
         }
         <!-- id() - signal computed (read only) -->
         <!-- ng-container and <ng-template> not necessary – because @if/@else replace it -->

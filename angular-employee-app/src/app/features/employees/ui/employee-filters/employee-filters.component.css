@@ -1,1 +1,6 @@
-
+.filters-btn-add-employes {
+    max-width: 160px;
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}

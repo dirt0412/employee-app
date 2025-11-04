@@ -1,5 +1,5 @@
 .btn-link {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 :host {
@@ -12,10 +12,12 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;  /* at the top */
+  justify-content: flex-start;
+  /* at the top */
   align-items: stretch;
   gap: var(--gap);
-  overflow: auto;               /* scroll the list page */
+  overflow: auto;
+  /* scroll the list page */
 }
 
 /* Header/filters above the table (optional) */
@@ -27,4 +29,8 @@
 .table-card {
   flex: 0 0 auto;
   align-self: stretch;
+}
+
+.u-employee-list-page {
+  margin-bottom: 12px;
 }
