@@ -2,12 +2,8 @@
   <app-employee-filters
     [firstName]="store.firstNameFilter()"
     [lastName]="store.lastNameFilter()"
-    [sortKey]="store.sortKey()"
-    [sortDir]="store.sortDir()"
     (firstNameChange)="store.setFirstNameFilter($event)"
     (lastNameChange)="store.setLastNameFilter($event)"
-    (sortKeyChange)="store.setSortKey($event)"
-    (toggleSortDir)="store.toggleSortDir()"
   >
     <a actions routerLink="/employees/new" class="btn btn-link" style="flex:1;">Add employee</a>
   </app-employee-filters>

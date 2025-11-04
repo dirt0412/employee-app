@@ -1,10 +1,16 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { Employee } from '../../models/employee.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
-type SortKey = keyof Pick<Employee, 'firstName' | 'lastName' | 'registryNumber'>;
 
 @Component({
   selector: 'app-employee-filters',
@@ -15,72 +21,49 @@ type SortKey = keyof Pick<Employee, 'firstName' | 'lastName' | 'registryNumber'>
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeeFiltersComponent implements OnInit, OnChanges {
-  /** current sort key (initially provided from the page) */
-  @Input() sortKey?: SortKey;
-  /** sort direction (displayed on the button; changed externally by the store) */
-  @Input() sortDir: 'asc' | 'desc' = 'asc';
-  /** delay for typed filters (ms) */
-  @Input() debounceMs = 400;
+  /** values coming from store (from outside) */
   @Input() firstName: string = '';
   @Input() lastName: string = '';
 
+  @Input() debounceMs = 400;
 
+  /** eventy from parent */
   @Output() firstNameChange = new EventEmitter<string>();
   @Output() lastNameChange = new EventEmitter<string>();
-  @Output() sortKeyChange = new EventEmitter<SortKey | undefined>();
-  @Output() toggleSortDir = new EventEmitter<void>();
 
   form = this.fb.group({
     firstName: this.fb.control<string>(''),
     lastName: this.fb.control<string>(''),
-    sortKey: this.fb.control<SortKey | undefined>(undefined)
   });
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
 
-    this.fillForm();
+    this.syncFormFromInputs();
 
-    // first input with delay
     this.form.controls.firstName.valueChanges
       .pipe(debounceTime(this.debounceMs), distinctUntilChanged())
-      .subscribe(v => this.firstNameChange.emit(v ?? ''));
+      .subscribe((v) => this.firstNameChange.emit(v ?? ''));
 
-    // second input with delay
     this.form.controls.lastName.valueChanges
       .pipe(debounceTime(this.debounceMs), distinctUntilChanged())
-      .subscribe(v => this.lastNameChange.emit(v ?? ''));
-
-    // change sortKey without debounce (this is a select)
-    this.form.controls.sortKey.valueChanges
-      .pipe(distinctUntilChanged())
-      .subscribe(v => this.sortKeyChange.emit(v ?? undefined));
+      .subscribe((v) => this.lastNameChange.emit(v ?? ''));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if ('firstName' in changes || 'lastName' in changes || 'sortKey' in changes) {
-      this.form.patchValue(
-        {
-          firstName: this.firstName ?? '',
-          lastName: this.lastName ?? '',
-          sortKey: this.sortKey,
-        },
-        { emitEvent: false }
-      );
+    if ('firstName' in changes || 'lastName' in changes) {
+      this.syncFormFromInputs();
     }
   }
 
-  fillForm(): void {
+  private syncFormFromInputs(): void {
     this.form.patchValue(
       {
         firstName: this.firstName ?? '',
         lastName: this.lastName ?? '',
-        sortKey: this.sortKey,
       },
-      { emitEvent: false }
+      { emitEvent: false } 
     );
   }
-
-
 }
