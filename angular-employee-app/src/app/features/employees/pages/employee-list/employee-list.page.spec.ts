@@ -5,9 +5,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EmployeeStore } from '@employees/state/employee.store';
 
 class MockEmployeeStore {
+  firstNameFilter() { return ''; }
+  lastNameFilter()  { return ''; }
+
   sortKey() { return 'firstName'; }
   sortDir() { return 'asc'; }
   filteredEmployees() { return [{ id: 1, firstName: 'Jan', lastName: 'Kowalski' }]; }
+
   setFirstNameFilter(_: string) {}
   setLastNameFilter(_: string) {}
   setSortKey(_: string) {}

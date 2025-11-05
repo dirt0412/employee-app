@@ -1,37 +1,62 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject } from 'rxjs';
 import { EmployeeStore, SortKey } from './employee.store';
-import { Employee } from '@employees/models/employee.model';
-import { EmployeeListPage } from '@employees/pages/employee-list/employee-list.page';
+import { EmployeeService } from '../data-access/employee.service';
 
+class EmployeeServiceMock {
 
-describe('EmployeeListPage', () => {
-  beforeEach(async () => {
+  employees$ = new BehaviorSubject<any[]>([]);
+}
 
-    const storeMock: Partial<EmployeeStore> = {
-      firstNameFilter: () => '',
-      lastNameFilter:  () => '',
-      sortKey:         () => undefined as SortKey | undefined,
-      sortDir:         () => 'asc',
-      filteredEmployees: () => [] as Employee[],
+describe('EmployeeStore', () => {
+  let store: EmployeeStore;
+  let svc: EmployeeServiceMock;
 
-      setFirstNameFilter: () => {},
-      setLastNameFilter:  () => {},
-      setSortKey:         () => {},
-      toggleSortDir:      () => {},
-    };
+  beforeEach(() => {
+    svc = new EmployeeServiceMock();
 
-    await TestBed.configureTestingModule({
-      imports: [EmployeeListPage, RouterTestingModule],
-    })
+    TestBed.configureTestingModule({
+      providers: [
+        EmployeeStore,
+        { provide: EmployeeService, useValue: svc },
+      ],
+    });
 
-      .overrideProvider(EmployeeStore, { useValue: storeMock })
-      .compileComponents();
+    store = TestBed.inject(EmployeeStore);
   });
 
-  it('should render the page', () => {
-    const fixture = TestBed.createComponent(EmployeeListPage);
-    fixture.detectChanges();
-    expect(fixture.componentInstance).toBeTruthy();
+  it('starts with empty list', () => {
+    expect(store.filteredEmployees()).toEqual([]);
+  });
+
+  it('filters by firstName and lastName', () => {
+
+    svc.employees$.next([
+      { firstName: 'Anna', lastName: 'Nowak', registryNumber: '100' },
+      { firstName: 'Antek', lastName: 'Kowalski', registryNumber: '101' },
+      { firstName: 'Bartek', lastName: 'Nowak', registryNumber: '102' },
+    ]);
+
+    expect(store.filteredEmployees().length).toBe(3);
+
+    store.setFirstNameFilter('an');
+    expect(store.filteredEmployees().map(e => e.firstName)).toEqual(['Anna', 'Antek']);
+
+    store.setLastNameFilter('now'); 
+    expect(store.filteredEmployees().map(e => e.lastName)).toEqual(['Nowak']);
+  });
+
+  it('sorts by key and direction', () => {
+    svc.employees$.next([
+      { firstName: 'C', lastName: 'Z', registryNumber: '102' },
+      { firstName: 'A', lastName: 'X', registryNumber: '100' },
+      { firstName: 'B', lastName: 'Y', registryNumber: '101' },
+    ]);
+
+    store.setSortKey('firstName' as SortKey);
+    expect(store.filteredEmployees().map(e => e.firstName)).toEqual(['A', 'B', 'C']);
+
+    store.toggleSortDir();
+    expect(store.filteredEmployees().map(e => e.firstName)).toEqual(['C', 'B', 'A']);
   });
 });
