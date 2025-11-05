@@ -1,55 +1,80 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { SimpleChange } from '@angular/core';
 import { EmployeeFiltersComponent } from './employee-filters.component';
 
 describe('EmployeeFiltersComponent (Reactive)', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmployeeFiltersComponent]
+      imports: [EmployeeFiltersComponent],
     }).compileComponents();
   });
 
-  it('emit firstNameChange after debounce', fakeAsync(() => {
+  it('emits firstNameChange after debounce', fakeAsync(() => {
     const fixture = TestBed.createComponent(EmployeeFiltersComponent);
     const comp = fixture.componentInstance;
 
-    comp.debounceMs = 200; // test delay
-    fixture.detectChanges();
+    comp.debounceMs = 200;
+    fixture.detectChanges(); 
 
     let emitted = '';
-    comp.firstNameChange.subscribe(v => (emitted = v));
+    const sub = comp.firstNameChange.subscribe(v => (emitted = v));
 
     comp.form.controls.firstName.setValue('Ann');
     tick(199);
     expect(emitted).toBe('', 'should not emit before debounce');
 
-    tick(1); // 200ms
+    tick(1); // = 200ms
     expect(emitted).toBe('Ann');
+
+    sub.unsubscribe();
+    flush();
   }));
 
-  it('emit sortKeyChange without debounce', () => {
+  it('emits lastNameChange after debounce', fakeAsync(() => {
     const fixture = TestBed.createComponent(EmployeeFiltersComponent);
     const comp = fixture.componentInstance;
+
+    comp.debounceMs = 150;
     fixture.detectChanges();
 
-    let emitted: any;
-    comp.sortKeyChange.subscribe(v => (emitted = v));
+    let emitted = '';
+    const sub = comp.lastNameChange.subscribe(v => (emitted = v));
 
-    comp.form.controls.sortKey.setValue('lastName');
-    expect(emitted).toBe('lastName');
-  });
+    comp.form.controls.lastName.setValue('Smith');
+    tick(149);
+    expect(emitted).toBe('', 'should not emit before debounce');
 
-  it('updates form when sortKey input changes (no emit)', () => {
+    tick(1); // = 150ms
+    expect(emitted).toBe('Smith');
+
+    sub.unsubscribe();
+    flush();
+  }));
+
+  it('updates form when @Input values change (no events emitted)', () => {
     const fixture = TestBed.createComponent(EmployeeFiltersComponent);
     const comp = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.detectChanges(); 
 
-    let emitted: any = undefined;
-    comp.sortKeyChange.subscribe(v => (emitted = v));
+    let firstEmitted = 'INIT';
+    let lastEmitted = 'INIT';
+    const s1 = comp.firstNameChange.subscribe(v => (firstEmitted = v));
+    const s2 = comp.lastNameChange.subscribe(v => (lastEmitted = v));
 
-    comp.sortKey = 'lastName' as any;
-    comp.ngOnChanges({ sortKey: { previousValue: undefined, currentValue: 'lastName', firstChange: true, isFirstChange: () => true } as any });
-    expect(comp.form.controls.sortKey.value).toBe('lastName' as any);
-    expect(emitted).toBeUndefined();
+    comp.firstName = 'Zoe';
+    comp.lastName = 'Lee';
+    comp.ngOnChanges({
+      firstName: new SimpleChange('', 'Zoe', false),
+      lastName: new SimpleChange('', 'Lee', false),
+    });
+
+    expect(comp.form.controls.firstName.value).toBe('Zoe');
+    expect(comp.form.controls.lastName.value).toBe('Lee');
+
+    expect(firstEmitted).toBe('INIT');
+    expect(lastEmitted).toBe('INIT');
+
+    s1.unsubscribe();
+    s2.unsubscribe();
   });
-
 });

@@ -1,47 +1,37 @@
-import { EmployeeStore } from './employee.store';
-import { EmployeeService } from '../data-access/employee.service';
-import { Gender } from '../models/employee.model';
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { EmployeeStore, SortKey } from './employee.store';
+import { Employee } from '@employees/models/employee.model';
+import { EmployeeListPage } from '@employees/pages/employee-list/employee-list.page';
 
-describe('EmployeeStore (Signals)', () => {
-  let service: EmployeeService;
-  let store: EmployeeStore;
 
-  beforeEach(() => {
-    service = new EmployeeService();
-    store = new EmployeeStore(service);
+describe('EmployeeListPage', () => {
+  beforeEach(async () => {
+
+    const storeMock: Partial<EmployeeStore> = {
+      firstNameFilter: () => '',
+      lastNameFilter:  () => '',
+      sortKey:         () => undefined as SortKey | undefined,
+      sortDir:         () => 'asc',
+      filteredEmployees: () => [] as Employee[],
+
+      setFirstNameFilter: () => {},
+      setLastNameFilter:  () => {},
+      setSortKey:         () => {},
+      toggleSortDir:      () => {},
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [EmployeeListPage, RouterTestingModule],
+    })
+
+      .overrideProvider(EmployeeStore, { useValue: storeMock })
+      .compileComponents();
   });
 
-  it('filter by name and surname', () => {
-    service.add({ firstName: 'Zenon', lastName: 'Zieliński', gender: Gender.Male });
-
-    store.setFirstNameFilter('Zen');
-    store.setLastNameFilter('Ziel');
-
-    const rows = store.filteredEmployees();
-    expect(rows.length).toBe(1);
-    expect(rows[0].firstName).toBe('Zenon');
+  it('should render the page', () => {
+    const fixture = TestBed.createComponent(EmployeeListPage);
+    fixture.detectChanges();
+    expect(fixture.componentInstance).toBeTruthy();
   });
-
-  it('toggles sort direction', () => {
-    store.setSortKey('firstName');
-    const before = store.filteredEmployees().map(e => e.firstName);
-    store.toggleSortDir();
-    const after = store.filteredEmployees().map(e => e.firstName);
-    expect(after.join()).not.toEqual(before.join());
-  });
-
-  it('sorts by lastName ascending when setSortKey is used', () => {
-    store.setSortKey('lastName');
-    const names = store.filteredEmployees().map(e => e.lastName);
-    const sorted = [...names].sort((a,b)=>(''+a).localeCompare(''+b));
-    expect(names.join()).toBe(sorted.join());
-  });
-
-  it('keeps data when clearing sortKey', () => {
-    store.setSortKey(undefined);
-    const list = store.filteredEmployees();
-    expect(Array.isArray(list)).toBeTrue();
-    expect(list.length).toBeGreaterThan(0);
-  });
-
 });

@@ -14,7 +14,6 @@ const ctx = (import.meta as any).webpackContext('./', {
   recursive: true,
   regExp: /\.spec\.ts$/
 });
-
 for (const key of ctx.keys()) {
   ctx(key);
 }
